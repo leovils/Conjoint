@@ -63,6 +63,14 @@ if "current_pair" not in st.session_state:
 if "survey_finished" not in st.session_state:
     st.session_state.survey_finished = False
 
+import threading
+
+def _bg_post(url, payload):
+    try:
+        requests.post(url, json=payload, timeout=15)
+    except:
+        pass
+
 def send_to_webhook(pair, chosen):
     webhook = st.session_state.webhook_url
     if not webhook: return
@@ -80,14 +88,9 @@ def send_to_webhook(pair, chosen):
     for q, a in st.session_state.profile_answers.items():
         payload[f"Perfil_{q}"] = a
         
-    try:
-        response = requests.post(webhook, json=payload, timeout=5)
-        if response.status_code != 200:
-            st.session_state.webhook_error = f"⚠️ O Google recusou a conexão (Código {response.status_code})."
-        else:
-            st.session_state.webhook_error = None
-    except Exception as e:
-        st.session_state.webhook_error = f"⚠️ Timeout ou Erro de Webhook: {str(e)}"
+    # Envia em segundo plano (background) para não travar a tela
+    threading.Thread(target=_bg_post, args=(webhook, payload), daemon=True).start()
+    st.session_state.webhook_error = None
 
 st.title("Conjoint Analysis - Pesquisa Interativa")
 
