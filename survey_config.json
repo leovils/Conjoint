@@ -1,0 +1,73 @@
+{
+    "intro_text": "Olá, agradeço sua disposição em participar da pesquisa. O que você verá a seguir são pares de opções sobre a escolha de aplicativos de entrega de comida. As opções foram criadas para teste e não foram desenvolvidas, por enquanto, a partir da literatura científica. Antes de começar farei algumas perguntas a seu respeito, também a titulo de teste, e e seguida começaremos a pesquisa. Tudo que você precisa fazer é  em cada par apresentado selecionar aquele que melhor representa o seu processo de escolha. ",
+    "webhook_url": "https://script.google.com/macros/s/AKfycby19tpY-j7IItbW6NjS9cXOajzl95TBw0C9XtuYAo8-f4nFPgWCY1U3dPy49uErmFf2ag/exec",
+    "profile_questions": [
+        {
+            "question": "Sexo",
+            "options": [
+                "Masculino",
+                "Feminino",
+                "Prefito não Responder"
+            ]
+        },
+        {
+            "question": "Sua idade",
+            "options": [
+                "Menos de 18 anos",
+                "18 a 24 anos",
+                "25 a 34 anos",
+                "35 a 44 anos",
+                "45 a 54 anos",
+                "55 anos ou mais"
+            ]
+        },
+        {
+            "question": "Renda Familiar: soma de seu rendimento mensal e de todas as pessoas que moram com você.",
+            "options": [
+                "Até 2 salários mínimos",
+                "Entre 2 e 4 salários mínimos",
+                "Entre  4 e 6 salários mínimos",
+                "Entre  6 e 10 salários mínimos",
+                "Mais de 10 salários mínimos"
+            ]
+        },
+        {
+            "question": "Escolaridade.",
+            "options": [
+                "Sem instrução",
+                "Ensino fundamental completo",
+                "Ensino médio completo",
+                "Ensino superior completo",
+                "Pós-graduação completa"
+            ]
+        }
+    ],
+    "attributes": {
+        "Custo de entrega": [
+            "Grátis",
+            "R$ 4.99",
+            "R$ 9.99"
+        ],
+        "Prazo de Entrega": [
+            "Até 20 minutos",
+            "Entre 20 e 40 minutos",
+            "Mais de 40 Minutos"
+        ],
+        "Preços em relação aos praticados pelo restaurante.": [
+            "Mesmo preço",
+            "Levemente mais caro (até 10% acima)",
+            "Bem mais caro (mais de 20% acima)"
+        ],
+        "Variedade de restaurantes disponíveis": [
+            "Poucas opções",
+            "Quantidade moderada de opções",
+            "Muitas opções"
+        ],
+        "Benefícios e promoções": [
+            "Sem promoções",
+            "Cupons ocasionais",
+            "Cupons frequentes"
+        ]
+    },
+    "forbidden": []
+}
