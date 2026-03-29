@@ -153,17 +153,27 @@ class ConjointEngine:
         return pd.DataFrame(rows)
 
     def get_utilities_df(self):
+        zc_betas = self.betas.copy()
+        for attr in self.attributes.keys():
+            indices = [i for i, f in enumerate(self.features) if f.startswith(attr + "::")]
+            if indices:
+                attr_mean = np.mean(zc_betas[indices])
+                zc_betas[indices] -= attr_mean
+                
         return pd.DataFrame({
-            "Nível (Feature)": self.features,
-            "Utilidade (Beta)": self.betas
+            "Atributo": [f.split("::")[0] for f in self.features],
+            "Nível": [f.split("::")[1] for f in self.features],
+            "Feature Raw": self.features,
+            "Utilidade Zero-Centrada": zc_betas,
+            "Beta Bruto": self.betas
         })
         
     def get_importance_df(self):
         # Range of utilities within each attribute
         importance = {}
         for attr in self.attributes.keys():
-            # Get betas for this attribute
             indices = [i for i, f in enumerate(self.features) if f.startswith(attr + "::")]
+            # Usa os betas ja centralizados ou brutos, range é o mesmo
             b = self.betas[indices]
             range_b = np.max(b) - np.min(b)
             importance[attr] = range_b
@@ -174,22 +184,21 @@ class ConjointEngine:
         for attr, imp in importance.items():
             rows.append({
                 "Atributo": attr,
-                "Relative Importance (%)": round((imp / total) * 100, 2)
+                "Relative Importance (%)": round((imp / total) * 100, 2),
+                "Range Absoluto": imp
             })
             
-        return pd.DataFrame(rows)
+        return pd.DataFrame(rows).sort_values(by="Relative Importance (%)", ascending=False)
 
-    def simulate_market_share(self, profile1, profile2):
-        v1 = self._encode_profile(profile1)
-        v2 = self._encode_profile(profile2)
+    def simulate_market_share_n(self, profiles_list):
+        shares = []
+        u_list = []
+        for p in profiles_list:
+            v = self._encode_profile(p)
+            u = np.dot(v, self.betas)
+            u_list.append(np.exp(u))
         
-        # U_1 = Sum(Beta * V1)
-        u1 = np.dot(v1, self.betas)
-        u2 = np.dot(v2, self.betas)
-        
-        # Multinomial Logit Formula
-        exp_u1 = np.exp(u1)
-        exp_u2 = np.exp(u2)
-        total_exp = exp_u1 + exp_u2
-        
-        return exp_u1 / total_exp, exp_u2 / total_exp
+        total_exp = sum(u_list)
+        if total_exp == 0:
+            return [1.0/len(profiles_list)] * len(profiles_list)
+        return [u / total_exp for u in u_list]
