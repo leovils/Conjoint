@@ -3,3 +3,8 @@ pandas
 numpy
 scikit-learn
 requests
+supabase
+openpyxl
+plotly
+fpdf2
+matplotlib
